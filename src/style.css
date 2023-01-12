@@ -1,0 +1,146 @@
+p h1 {
+    margin-top: 6px;
+    position: static;
+    margin:4px;
+    padding-bottom: 6px;
+    font-family: Lato;
+  }
+  footer {
+    position: fixed;
+    bottom: 10px;
+  }
+  #oT{
+    box-sizing: border-box;
+    padding-bottom: 12px;
+    padding-left: 12px;
+    left:10px;
+    top:0px;
+    width:60%;
+    background-color: orchid;
+    transform: skewX(-15deg);
+    color:aliceblue;
+  }
+  
+  #o3D{
+  position: absolute;
+   width:20%;
+   right:10px;
+   top:10px;
+   box-sizing: border-box;
+   text-align: center;
+   float: right;
+   padding: 5px;
+   margin:2px;
+   text-shadow: 2px 2px 5px sandybrown;
+   box-shadow: 6px 3px 5px;
+   letter-spacing: 3px;
+   background-color: lightblue;
+   border: 3px solid blue;
+   color: blueviolet;
+   border-radius: 10px;
+   transform: rotate(-375deg);
+   transition: transform 2s ease-in-out;
+  }
+  #o3D:hover{
+    transform: rotate(375deg);
+  
+  }
+  table{
+    border: 3px solid black;
+    border-collapse: separate;
+    border-spacing: 1px;
+    border-radius: 10px;
+    box-shadow: 6px 3px 2px;
+    background-color: beige;
+    font-size: 1em;
+   }
+  td, .CanClick, .CannotClick{
+    background-color: forestgreen;
+    box-shadow: 6 3 2;
+    border:2px solid darkolivegreen;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: beige;
+    }
+  /*
+  tr:first-child td{
+    border-radius: 12px;
+    background-color: orchid;
+  }
+  */
+  .PlayerActive{
+    border-radius: 12px;
+    background-color: orchid;
+  }
+  
+  .PlayerPassive{
+    border-radius: 12px;
+    background-color:mediumslateblue;
+  }
+  /*
+  td:first-child:hover{
+    box-shadow: 3 3 2 inset;
+    background-color: limegreen;
+  }
+  */
+  tr:nth-child(8n) td{
+    background-color: steelblue;
+  }
+  tr:nth-child(8n):hover td{
+    background-color: steelblue;
+  }
+  
+  svg{
+    margin-top: 10px;
+    background-color: darkolivegreen;
+    border:2px solid blueviolet;
+  }
+  
+  .DiceRoll{
+    stroke:plum;
+    stroke-width: 3px;
+  }
+  
+  .DiceRoll:hover{
+    stroke: lightpink;
+  }
+  
+  .DiceHold{
+    stroke:blueviolet;
+    stroke-width: 3px;
+  }
+  
+  .DiceHold:hover{
+    stroke: slateblue;
+  }
+  
+  text {
+    font-size: 3em ;
+  }
+  em{
+    text-align: right;
+    float:right;
+    color:aqua;
+  }
+  span{
+    float:left;
+    text-align: left;
+    margin-right: 5px;
+  }
+  
+  .ScorePlayed{
+    text-align: right;
+    float:right;
+    color:aqua;
+  }
+  
+  .CanClick:hover{
+    box-shadow: 3 3 2 inset;
+    background-color: limegreen;
+  }
+  
+  .CannotClick:hover{
+    box-shadow: 3 3 2 inset;
+    background-color: forestgreen;
+  }

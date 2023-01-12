@@ -1,22 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./style.css";
+import Scores from "./Scores.js";
+import {YLobby, GAMETYPE} from "./yscore.js"
 
-function App() {
+function App(props) {
+
+  let lobby = new YLobby("Herve",0,"pros",0);
+  lobby.AddPlayer("Lea",1,"pros");
+  lobby.SetGameMode (GAMETYPE.doublebonus, false);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1> <div id='oT'> Yatzee 3D </div> <div id='o3D'> 3D </div> </h1>
+      <Scores lobby={lobby}/> 
       </header>
     </div>
   );
