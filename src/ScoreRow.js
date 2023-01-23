@@ -7,7 +7,7 @@ export default function ScoreRow(props) {
 
   const rows = props.scoreRow;
 
-  const displayPreview = (i) => props.display_preview?props.score_preview[i]:" ";
+  const displayPreview = (i) => (props.allowHover && props.display_preview)?props.score_preview[i]:" ";
 
   const clickhandle = (e) =>  props.handleClickScore(e,i);
 

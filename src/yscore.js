@@ -762,6 +762,11 @@ export class YGame {
     return JSON.stringify(this);
   }
 
+  Clone (yg){
+    const clone = yg.JsonToYgame(yg.Export());
+    return clone;
+  }
+  
   JsonToYgame(json){
 
     let yg = Object.assign(new YGame(), JSON.parse(json));
@@ -780,8 +785,8 @@ export class YGame {
     
     yg.lobby = players;
 
-    yg.nextrollnumber = this._nextrollnumber;
-    yg.holdmask = this._holdmask;
+    yg.nextrollnumber = yg._nextrollnumber;
+    yg.holdmask = yg._holdmask;
 
     
     return yg;
@@ -925,5 +930,3 @@ export class UIHandler {
 
   }
 }
-
-

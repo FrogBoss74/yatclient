@@ -11,14 +11,16 @@ export default class Scores extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      game: props.lobby.StartGame()
+      game: props.lobby.StartGame(),
+      gameundo: new YGame()
     };
 
     this.handleClickRoll = this.handleClickRoll.bind(this);
     this.handleClickHold = this.handleClickHold.bind(this);
-    this.clickScore = this.clickScore.bind(this);
-    this.switchClass = this.switchClass.bind(this);
-    this.resetClass = this.resetClass.bind(this);
+    this.clickScore      = this.clickScore.bind(this);
+    this.switchClass     = this.switchClass.bind(this);
+    this.resetClass      = this.resetClass.bind(this);
+    this.handleClickUndo = this.handleClickUndo.bind(this);
   }
 
   handleClickRoll = e => {
@@ -86,9 +88,7 @@ export default class Scores extends React.Component {
   clickScore = (e, i, enableClick) => {
     
     let game = Object.assign( new YGame(), this.state.game); 
-
-    //const canBePlayed =  this.state.canBePlayed;
-    //const canbeplayedarray = game.GetCurrentPlayer().yscore.canbeplayedarray.slice();
+    let gameundo = game.Clone(game); 
 
     const clickarray = game.enableclick;
 
@@ -101,7 +101,7 @@ export default class Scores extends React.Component {
 
       game.holdmask.map((v,i)=>this.resetClass(i,"DiceHold","DiceRoll"));
 
-      this.setState (state => ({game: game}), () => console.log("begining of turn", game.GetCurrentPlayer().yscore));
+      this.setState (state => ({game: game, gameundo:gameundo}), () => console.log("begining of turn", game.GetCurrentPlayer().yscore));
 
       if (game.endgame) {
         this.setState(state => ({
@@ -109,6 +109,21 @@ export default class Scores extends React.Component {
         }));
       }
     }
+  };
+
+  handleClickUndo = (e, enableClick) => {
+    
+    let game = Object.assign( new YGame(), this.state.game); 
+    let gameundo = Object.assign( new YGame(), this.state.gameundo); // no need deep copy here
+
+    e.preventDefault();
+
+    if (game.beginingofturn && !(this.state.gameundo.gameid === undefined)){
+      this.setState (state => ({game: gameundo, gameundo:gameundo}), () => console.log("Undo of score"));
+
+    }
+
+    
   };
 
   render() {
@@ -144,6 +159,7 @@ export default class Scores extends React.Component {
             <Players key={players_names}
               players={players_names}
               handleClickRoll={this.handleClickRoll}
+              handleClickUndo={this.handleClickUndo}
               activePlayerInd={currentplayerindex}
             />
 
