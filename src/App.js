@@ -1,22 +1,44 @@
 import React from "react";
 import "./style.css";
 import Scores from "./Scores.js";
-import {YLobby, GAMETYPE} from "./yscore.js"
+import {YLobby, GAMETYPE} from "./yscore.js";
+import Emitter from './events.js';
+import IO from './Socketio.js';
+import "./title3d.js";
 
-function App(props) {
 
-  let lobby = new YLobby("Herve",0,"pros",0);
-  lobby.AddPlayer("Lea",1,"pros");
-  lobby.SetGameMode (GAMETYPE.doublebonus, false);
+class App extends React.Component{
+  constructor(){
+    super();  
+    let lobby = new YLobby("Herve",0,"pros",0);
+    
+    lobby.AddPlayer("Lea",1,"pros");
+    lobby.SetGameMode (GAMETYPE.doublebonus, true);
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1> <div id='oT'> Yatzee 3D </div> <div id='o3D'> 3D </div> </h1>
-      <Scores lobby={lobby}/> 
-      </header>
-    </div>
-  );
+    if (lobby.islocalgame) {
+       this.state = {lobby:lobby, emitter:Emitter};
+      } 
+    else {
+      this.state = {lobby:lobby, emitter:IO}
+    }
+  };
+
+  componentDidMount(){
+    this.state.emitter.emit("LOBBY_READY","Emitter: Lobby is Ready");
+  };
+
+  render(){
+  
+
+    return (
+        <div className="App">
+          <header className="App-header">
+            <h1> <div id='oT'> Yatzee 3D </div> <div id='o3D'> 3D </div> </h1>
+          <Scores lobby={this.state.lobby} emitter={this.state.emitter}/> 
+          </header>
+        </div>
+      );
+  };
 }
 
 export default App;

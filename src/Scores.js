@@ -7,6 +7,7 @@ import ScoreRow from "./ScoreRow.js";
 import Dice from "./Dice.js";
 import {YGame} from "./yscore.js";
 
+
 export default class Scores extends React.Component {
   constructor(props) {
     super(props);
@@ -16,49 +17,49 @@ export default class Scores extends React.Component {
     };
 
     this.handleClickRoll = this.handleClickRoll.bind(this);
+    this.updateAfterRoll = this.updateAfterRoll.bind(this);
     this.handleClickHold = this.handleClickHold.bind(this);
     this.clickScore      = this.clickScore.bind(this);
+    this.updateAfterScore  = this.updateAfterScore.bind(this);
     this.switchClass     = this.switchClass.bind(this);
     this.resetClass      = this.resetClass.bind(this);
     this.handleClickUndo = this.handleClickUndo.bind(this);
+    //this.handlemessages  = this.handlemessages.bind(this);
+
+ 
   }
+
+  componentDidMount(){
+    if (this.state.game.islocalgame){
+      this.props.emitter.on("LOBBY_READY", (m) => console.log(m));
+      this.props.emitter.on("ROLL_CLICKED",(m) => this.updateAfterRoll(m));
+      this.props.emitter.on("SCORE_CLICKED",(m) => this.updateAfterScore(m));
+  
+    }
+
+  };
+
 
   handleClickRoll = e => {
     e.preventDefault( );
    
-    let game = Object.assign( new YGame(), this.state.game); 
-    
-    if (game.canrollagain){
-      game.Roll();
-
-      this.setState (state => ({game: game}), () => console.log("roll",game.roll, "\nhold",game.holdmask));
-    
+    if (this.state.game.canrollagain){
+      this.props.emitter.emit("ROLL_CLICKED", this.state.game.Export());
     }
-     console.log(game.GetCurrentPlayerRoll());
    
   };
 
-  switchClass = (i, trueCond, fromClass, toClass) => {
-    const el = document.getElementById("d" + i);
-    if (trueCond) {
-      el.classList.remove(fromClass);
-      el.classList.add(toClass);
-    } else {
-      el.classList.remove(toClass);
-      el.classList.add(fromClass);
-    }
-  };
+  updateAfterRoll = (json) => {
+    let game = this.state.game.JsonToYgame(json); 
+    
+    if (game.islocalgame){
+      game.Roll();
+      }
+
+    this.setState (state => ({game: game}), () => console.log("roll",game.roll, "\nhold",game.holdmask));
+    console.log(game.GetCurrentPlayerRoll());
 
 
-
-  resetClass = (i, fromClass, toClass) => {
-    const el = document.getElementById("d" + i);
-    if (el.classList.contains(fromClass)) {
-      el.classList.remove(fromClass);
-      el.classList.add(toClass);
-    } else {
-      
-    }
   };
 
 
@@ -93,22 +94,41 @@ export default class Scores extends React.Component {
     const clickarray = game.enableclick;
 
     e.preventDefault();
+    
+    this.setState (state => ({gameundo:gameundo}), () => console.log("begining of turn", game.GetCurrentPlayer().yscore));
+
 
     if (clickarray && clickarray[i]) {
-       
+      this.props.emitter.emit("SCORE_CLICKED", {game:this.state.game.Export(),row:i});     
+
+    }
+  };
+
+  updateAfterScore = (json) => {
+    
+    if (!json.game || !json.row){
+      console.log('Json.game not available');
+      return;
+    }
+
+    let game = this.state.game.JsonToYgame(json.game); 
+    
+    if (game.islocalgame) {
+      const i = parseInt(json.row,10);   
       game.ValidateScore(i);
       game.PassTurn();
+    } 
+      
+    game.holdmask.map((v,i)=>this.resetClass(i,"DiceHold","DiceRoll"));
+      
+    this.setState (state => ({game: game}), () => console.log("begining of turn", game.GetCurrentPlayer().yscore));
 
-      game.holdmask.map((v,i)=>this.resetClass(i,"DiceHold","DiceRoll"));
-
-      this.setState (state => ({game: game, gameundo:gameundo}), () => console.log("begining of turn", game.GetCurrentPlayer().yscore));
-
-      if (game.endgame) {
+    if (game.endgame) {
         this.setState(state => ({
           endGame: true
-        }));
-      }
+        }));  
     }
+    
   };
 
   handleClickUndo = (e, enableClick) => {
@@ -125,6 +145,31 @@ export default class Scores extends React.Component {
 
     
   };
+
+  
+  switchClass = (i, trueCond, fromClass, toClass) => {
+    const el = document.getElementById("d" + i);
+    if (trueCond) {
+      el.classList.remove(fromClass);
+      el.classList.add(toClass);
+    } else {
+      el.classList.remove(toClass);
+      el.classList.add(fromClass);
+    }
+  };
+
+
+
+  resetClass = (i, fromClass, toClass) => {
+    const el = document.getElementById("d" + i);
+    if (el.classList.contains(fromClass)) {
+      el.classList.remove(fromClass);
+      el.classList.add(toClass);
+    } else {
+      
+    }
+  };
+
 
   render() {
 
