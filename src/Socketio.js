@@ -1,6 +1,14 @@
-import {io} from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
+import {io} from "https://cdn.socket.io/4.5.4/socket.io.esm.min.js";
 
-const socketio = io("http://127.0.0.1:8000");
+const socketio = io("http://127.0.0.1:8000",{
+  withCredentials: true,
+  extraHeaders: {
+    "Authorization": "abcd"
+  },
+  query: {
+    token:'abc'
+  }
+});
 
 
  var messages = document.getElementById('messages');
@@ -15,14 +23,6 @@ const socketio = io("http://127.0.0.1:8000");
    }
  });
 
-
-socketio.on('connect', function () {
-    console.log('Client io connected');
-    let led = document.getElementById('connectorled');
-    led.classList.remove('redlight');
-    led.classList.add('greenlight');
-  
-  });
 
   socketio.on('connect', function () {
     console.log('Client io connected');
